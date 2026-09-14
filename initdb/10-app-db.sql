@@ -1,0 +1,5 @@
+
+
+CREATE DATABASE app_corporativo;
+CREATE USER app_user WITH PASSWORD '12345';
+GRANT ALL PRIVILEGES ON DATABASE app_corporativo TO app_user;
