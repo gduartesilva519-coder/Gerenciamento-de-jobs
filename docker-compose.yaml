@@ -106,7 +106,7 @@ services:
     restart: always
 
   tomcat:
-      image: meu-tomcat:9
+      image: meu-tomcat-gerenciamento-jobs:1.0
       ports:
         - "9090:8080"
       restart: always
