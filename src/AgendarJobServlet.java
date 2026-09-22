@@ -3,7 +3,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import org.postgresql.Driver;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,13 +19,13 @@ public class AgendarJobServlet extends HttpServlet {
         String data = request.getParameter("data");
         String horario = request.getParameter("horario");
 
-        String url = "jbdc:postgresql://postgres:5432/gerenciamento_jobs";
+        String url = "jdbc:postgresql://postgres:5432/gerenciamento_jobs";
         String usuario = "airflow";
         String senha = "airflow";
 
         String sql = "INSERT INTO jobs_produto "
-                    + "(produto, data_hora_execucao) "
-                    + "VALUES (?,?)";
+                    + "(produto, status, data_hora_execucao) "
+                    + "VALUES (?, ?, ?)";
 
         response.setContentType("text/html;charset=UTF-8");
 
@@ -36,17 +35,13 @@ public class AgendarJobServlet extends HttpServlet {
 
             Class.forName("org.postgresql.Driver");
 
-            java.sql.Driver driver = new Driver();
+            org.postgresql.Driver driver = new org.postgresql.Driver();
 
             java.util.Properties propriedades = new java.util.Properties();
-
             propriedades.setProperty("user", usuario);
             propriedades.setProperty("password", senha);
 
-            Connection conexao = driver.connect(
-                url, 
-                propriedades
-            );
+            Connection conexao = driver.connect(url, propriedades);
 
             String dataHora = data + " " + horario + ":00";
 
@@ -55,7 +50,8 @@ public class AgendarJobServlet extends HttpServlet {
             PreparedStatement comando = conexao.prepareStatement(sql);
 
             comando.setString(1, produto);
-            comando.setTimestamp(2, timestamp);
+            comando.setString(2, "AGENDADO");
+            comando.setTimestamp(3, timestamp);
 
             comando.executeUpdate();
 

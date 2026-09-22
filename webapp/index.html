@@ -10,7 +10,7 @@
 
     <h1>Gerenciamento de Jobs</h1>
 
-    <form>
+    <form action="/gerenciamento-jobs/agendar" method="post">
 
         <label for="produto">Produto:</label>
         <br>
@@ -33,6 +33,28 @@
         <button type="submit">Agendar Job</button>
 
     </form>
+
+    <script>
+
+        const parametros = new URLSearchParams(window.location.search);
+
+        const produto = parametros.get("produto");
+        const data = parametros.get("data");
+        const horario = parametros.get("horario");
+
+        if (produto) {
+            document.getElementById("produto").value = produto;
+        }
+
+        if (data) {
+            document.getElementById("data").value = data;
+        }
+
+        if (horario) {
+            document.getElementById("horario").value = horario;
+        }
+
+    </script>
     
 </body>
 
