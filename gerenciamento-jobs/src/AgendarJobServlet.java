@@ -20,7 +20,7 @@ public class AgendarJobServlet extends HttpServlet {
         String data = request.getParameter("data");
         String horario = request.getParameter("horario");
 
-        String url = "jbdc:postgresql://postgres:5432/gerenciamento_jobs";
+        String url = "jdbc:postgresql://postgres:5432/gerenciamento_jobs";
         String usuario = "airflow";
         String senha = "airflow";
 
@@ -36,16 +36,10 @@ public class AgendarJobServlet extends HttpServlet {
 
             Class.forName("org.postgresql.Driver");
 
-            java.sql.Driver driver = new Driver();
-
-            java.util.Properties propriedades = new java.util.Properties();
-
-            propriedades.setProperty("user", usuario);
-            propriedades.setProperty("password", senha);
-
-            Connection conexao = driver.connect(
+            Connection conexao = java.sql.DriverManager.getConnection(
                 url, 
-                propriedades
+                usuario,
+                senha
             );
 
             String dataHora = data + " " + horario + ":00";
@@ -73,6 +67,11 @@ public class AgendarJobServlet extends HttpServlet {
             out.println("<p>Produto: " + produto + "</p>");
             out.println("<p> " + data + "</p>");
             out.println("<p> " + horario + "</p>");
+
+            out.println("<br>");
+            out.println("<a href=\"http://localhost:9090/manager/html\">");
+            out.println("<button>Voltar para o Manager</button>");
+            out.println("</a>");
 
             out.println("</body>");
             out.println("</html>");
