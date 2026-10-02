@@ -11,7 +11,6 @@ O Tomcat está no localhost:9090, um servidor web onde fica o gerenciamento-jobs
 
 
 5. Arquiteturas:
-
 MVC = Tomcat > gerenciamento_jobs > MVC: Model, Controller, View > DAO > PostgreSQL > Airflow
 
 Hexagonal = Tomcat > Adaptador de entrada > Porta de entrada > Núcleo > Porta de saída > Adaptador de saída > Postgres > Airflow > Postgres
