@@ -11,7 +11,7 @@
     
     <servlet>
         <servlet-name>AgendarJobServlet</servlet-name>
-        <servlet-class>AgendarJobServlet</servlet-class>
+        <servlet-class>adapters.in.AgendarJobServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

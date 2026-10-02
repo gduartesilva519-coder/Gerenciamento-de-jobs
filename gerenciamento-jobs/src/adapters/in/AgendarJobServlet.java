@@ -1,5 +1,6 @@
+package adapters.in;
+
 import java.io.IOException;
-import dao.JobDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Job;
+
+import application.services.AgendarJobService;
+import ports.in.AgendarJobUseCase;
+import ports.out.JobRepository;
+import adapters.out.JobRepositoryPostgres;
 
 public class AgendarJobServlet extends HttpServlet {
 
@@ -28,9 +34,12 @@ public class AgendarJobServlet extends HttpServlet {
 
         try {
 
-            JobDAO dao = new JobDAO();
-            
-            dao.salvar(job);
+            JobRepository repository = new JobRepositoryPostgres();
+
+            AgendarJobUseCase useCase =
+                new AgendarJobService(repository);
+
+            useCase.agendar(job);
             
             request.setAttribute(
                 "produto",
