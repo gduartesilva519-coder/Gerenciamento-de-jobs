@@ -16,4 +16,4 @@ MVC = Tomcat > gerenciamento_jobs > MVC: Model, Controller, View > DAO > Postgre
 Hexagonal = Tomcat > Adaptador de entrada > Porta de entrada > Núcleo > Porta de saída > Adaptador de saída > Postgres > Airflow > Postgres
 
 
-5. Conhecimento adquiridos:
+6. Conhecimento adquiridos:
