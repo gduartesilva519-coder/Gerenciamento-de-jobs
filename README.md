@@ -3,7 +3,7 @@ Um sistema que faz agendamento de Jobs de produtos, criando uma tela onde regist
 
 
 2. Funcionamento do sistema:
-O Docker faz os containers se interagirem, usando um sistema de redes virtuais, cada containers sendo isolados do exterior e entre cada um por padrão. O Visual Studio Code, é a plataforma que possui a programação dos códigos de cada container, o Tomcat sendo utilizado a linguagem Java para criar o agendamento dos Jobs e o Airflow usa a linguagem Python para a criação de DAGs e o registro dos resultados com os dados, cada um tendo pastas diferentes para dividir as responsabilidades entre si e organizando a estrutura do sistema.
+O Docker faz os containers que se interagirem, usando um sistema de redes virtuais, cada containers sendo isolados do exterior e entre cada um por padrão. O Visual Studio Code, é a plataforma que possui a programação dos códigos de cada container, o Tomcat sendo utilizado a linguagem Java para criar o agendamento dos Jobs e o Airflow usa a linguagem Python para a criação de DAGs e o registro dos resultados com os dados, cada um tendo pastas diferentes para dividir as responsabilidades entre si e organizando a estrutura do sistema.
 
 
 3. Fluxo de execução:
