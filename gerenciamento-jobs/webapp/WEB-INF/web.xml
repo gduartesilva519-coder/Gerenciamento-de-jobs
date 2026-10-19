@@ -8,15 +8,25 @@
         <welcome-file>index.jsp</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    
+
     <servlet>
         <servlet-name>AgendarJobServlet</servlet-name>
         <servlet-class>adapters.in.AgendarJobServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ConsultarJobsServlet</servlet-name>
+        <servlet-class>adapters.in.ConsultarJobsServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>AgendarJobServlet</servlet-name>
         <url-pattern>/agendar</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ConsultarJobsServlet</servlet-name>
+        <url-pattern>/jobs</url-pattern>
     </servlet-mapping>
 
 </web-app>

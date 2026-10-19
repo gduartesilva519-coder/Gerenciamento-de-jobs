@@ -11,8 +11,10 @@ import model.Job;
 
 import application.services.AgendarJobService;
 import ports.in.AgendarJobUseCase;
+import ports.out.AgendamentoAirflowPorta;
 import ports.out.JobRepository;
 import adapters.out.JobRepositoryPostgres;
+import adapters.out.AgendamentoAirflowAdapter;
 
 public class AgendarJobServlet extends HttpServlet {
 
@@ -36,8 +38,15 @@ public class AgendarJobServlet extends HttpServlet {
 
             JobRepository repository = new JobRepositoryPostgres();
 
+            AgendamentoAirflowPorta agendamentoAirflow =
+            new AgendamentoAirflowAdapter(
+            "http://airflow-apiserver:8080",
+            "airflow",
+            "airflow"
+            );
+
             AgendarJobUseCase useCase =
-                new AgendarJobService(repository);
+                new AgendarJobService(repository, agendamentoAirflow);
 
             useCase.agendar(job);
             

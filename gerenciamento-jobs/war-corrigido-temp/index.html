@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciamento de Jobs</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial,sans-serif;
+            background-color: #f4f6f8;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container{
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #222;
+        }
+
+        .descricao {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+
+            border: none;
+            border-radius: 6px;
+
+            background-color: #333;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class ="card">
+
+            <h1>Gerenciamento de Jobs</h1>
+
+            <p class="descricao">
+                Agende a execução de um produto
+            </p>
+
+            <form action="/gerenciamento-jobs/agendar" method="post">
+
+                <div class="campo">
+                    <label for="produto">Produto</label>
+                    <input
+                        type="text"
+                        id="produto"
+                        name="produto"
+                        placeholder="Digite o produto"
+                        required>
+                </div>
+
+                <div class="campo">
+                    <label for="data">Data</label>
+                    <input
+                    type="date"
+                    id="data"
+                    name="data"
+                    required>
+                </div>
+
+                <div class="campo">
+                    <label for="horario">Horário</label>
+                    <input
+                        type="time"
+                        id="horario"
+                        name="horario"
+                        required>
+                </div>
+
+                <button type="submit">
+                    Agendar Job
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+    
+</body>
+
+</html>

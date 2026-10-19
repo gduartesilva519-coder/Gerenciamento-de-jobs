@@ -82,6 +82,10 @@
             Voltar para o Manager
         </a>
 
+        <a href="/gerenciamento-jobs/jobs">
+            Lista de Jobs Agendados
+        </a>
+
     </div>
 
 </body>
