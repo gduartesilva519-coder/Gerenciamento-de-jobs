@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 
 public class AgendamentoAirflowAdapter implements AgendamentoAirflowPorta{
 
@@ -32,8 +31,7 @@ public class AgendamentoAirflowAdapter implements AgendamentoAirflowPorta{
         String token = obterToken();
 
         String json = "{"
-                + "\"dag_run_id\":\"job_" + job.getId() + "\","
-                + "\"logical_date\":\"" + Instant.now().toString() + "\","
+                + "\"dag_run_id\":\"job_" + job.getId() + "_" + System.currentTimeMillis() + "\","
                 + "\"conf\":{"
                 + "\"job_id\":" + job.getId() + ","
                 + "\"produto\":\"" + escaparJson(job.getProduto()) + "\","
@@ -80,15 +78,13 @@ public class AgendamentoAirflowAdapter implements AgendamentoAirflowPorta{
                 );
             }
 
+            String respostaOk = lerResposta(conexao.getInputStream());
+            System.out.println("[AIRFLOW] HTTP " + status + " -> " + respostaOk);
+
+        } catch (RuntimeException erro) {
+            throw erro;
         } catch (Exception erro) {
-            throw new  RuntimeException(
-                    "Falha ao enviar agendamento ao Airflow.",
-                    erro
-            );
-        } finally {
-            if (conexao != null) {
-                conexao.disconnect();
-            }
+            throw new RuntimeException("Falha ao enviar agendamento ao Airflow.", erro);
         }
     }
 
@@ -151,15 +147,11 @@ public class AgendamentoAirflowAdapter implements AgendamentoAirflowPorta{
 
             return  corpo.substring(inicio, fim);
 
+        } catch (RuntimeException erro) {
+            throw erro;
+
         } catch (Exception erro) {
-            throw new RuntimeException(
-                    "Não foi possível autenticar na API do Airflow.",
-                    erro
-            );
-        } finally {
-            if (conexao != null) {
-                conexao.disconnect();
-            }
+            throw new RuntimeException("Não foi possível autenticar na API do Airflow.", erro);
         }
     }
 

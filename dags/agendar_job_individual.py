@@ -16,22 +16,23 @@ def buscar_e_reservar_jobs():
     try:
         cursor.execute(
             """
-            WITH jobs_prontos AS (
+            WITH proximo_job AS (
                 SELECT id
                 FROM public.jobs_produto
                 WHERE status = 'AGENDADO'
                   AND data_hora_execucao <=
                       (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')
                 ORDER BY data_hora_execucao, id
+                LIMIT 1
                 FOR UPDATE SKIP LOCKED
-        )
-        UPDATE public.jobs_produto AS j
-        SET status = 'DISPARADO'
-        FROM jobs_prontos AS p
-        WHERE j.id = p.id
-          AND j.status = 'AGENDADO'
-        RETURNING j.id, j.produto;
-        """
+            )
+            UPDATE public.jobs_produto AS j
+            SET status = 'DISPARADO'
+            FROM proximo_job AS p
+            WHERE j.id = p.id
+              AND j.status = 'AGENDADO'
+            RETURNING j.id, j.produto;
+            """
         )
 
         jobs = cursor.fetchall()
@@ -39,10 +40,7 @@ def buscar_e_reservar_jobs():
 
         resultado = [
             {
-                "conf": {
-                    "job_id": job_id,
-                    "produto": produto,
-                },
+                "conf": {"job_id": job_id, "produto": produto},
                 "trigger_run_id": f"execucao_job_{job_id}",
             }
             for job_id, produto in jobs
@@ -62,11 +60,10 @@ def buscar_e_reservar_jobs():
         cursor.close()
         conexao.close()
 
+
 with DAG(
     dag_id="agendar_job_individual",
-    start_date=pendulum.datetime(
-        2026, 1, 1, tz="America/Sao_Paulo"
-    ),
+    start_date=pendulum.datetime(2026, 1, 1, tz="America/Sao_Paulo"),
     schedule="* * * * *",
     catchup=False,
     max_active_runs=1,
@@ -78,7 +75,9 @@ with DAG(
     disparar_execucoes = TriggerDagRunOperator.partial(
         task_id="disparar_execucao",
         trigger_dag_id="executar_job_produto",
-        wait_for_completion=False,
+        wait_for_completion=True,   
+        deferrable=True,            
+        poke_interval=5,
     ).expand_kwargs(jobs)
 
     jobs >> disparar_execucoes

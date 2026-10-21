@@ -18,60 +18,58 @@ import adapters.out.AgendamentoAirflowAdapter;
 
 public class AgendarJobServlet extends HttpServlet {
 
-    @Override 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String produto = request.getParameter("produto");
-        String data = request.getParameter("data");
-        String horario = request.getParameter("horario");
-
-        String dataHora = data + " " + horario + ":00";
-
-        Job job = new Job(
-            produto,
-            "AGENDADO",
-            dataHora
-        );
-
         try {
+            String produto = request.getParameter("produto");
+            String data = request.getParameter("data");
+            String horario = request.getParameter("horario");
+
+            if (produto == null || data == null || horario == null) {
+                throw new IllegalArgumentException(
+                    "Campos ausentes. produto=" + produto
+                    + ", data=" + data + ", horario=" + horario);
+            }
+
+            // Aceita HH:mm ou HH:mm:ss
+            if (horario.length() == 5) {
+                horario = horario + ":00";
+            }
+
+            String dataHora = data + " " + horario;
+
+            Job job = new Job(produto, "AGENDADO", dataHora);
 
             JobRepository repository = new JobRepositoryPostgres();
 
             AgendamentoAirflowPorta agendamentoAirflow =
-            new AgendamentoAirflowAdapter(
-            "http://airflow-apiserver:8080",
-            "airflow",
-            "airflow"
-            );
+                new AgendamentoAirflowAdapter(
+                    "http://airflow-apiserver:8080",
+                    "airflow",
+                    "airflow"
+                );
 
             AgendarJobUseCase useCase =
                 new AgendarJobService(repository, agendamentoAirflow);
 
             useCase.agendar(job);
-            
-            request.setAttribute(
-                "produto",
-                job.getProduto()
-            );
 
-            request.setAttribute(
-                "dataHoraExecucao",
-                job.getDataHoraExecucao()
-            );
-
-            request.getRequestDispatcher("resultado.jsp")
-                   .forward(request, response);
+            request.setAttribute("produto", job.getProduto());
+            request.setAttribute("dataHoraExecucao", job.getDataHoraExecucao());
 
         } catch (Exception e) {
+            e.printStackTrace(); // vai para o log do Tomcat
 
-            request.setAttribute(
-                "erro",
-                e.getMessage()
-            );
+            Throwable causa = e;
+            while (causa.getCause() != null) {
+                causa = causa.getCause();
+            }
 
-            request.getRequestDispatcher("resultado.jsp")
-                   .forward(request, response);
+            request.setAttribute("erro", e.getMessage() + " | Causa: " + causa);
         }
+
+        request.getRequestDispatcher("resultado.jsp").forward(request, response);
     }
 }
